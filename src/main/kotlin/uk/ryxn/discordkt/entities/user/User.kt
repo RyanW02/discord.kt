@@ -7,43 +7,44 @@ import uk.ryxn.discordkt.entities.Snowflake
 import uk.ryxn.discordkt.gateway.Shard
 
 class User(
-    shard: Shard
-): Entity(shard) {
+    @Transient
+    override var shard: Shard,
+
     @SerializedName("id")
-    var id: Snowflake = 0u
+    val id: Snowflake,
 
     @SerializedName("username")
-    lateinit var username: String
+    val username: String,
 
     @SerializedName("discriminator")
-    var discriminator: Discriminator = 0
+    val discriminator: Discriminator,
 
     @SerializedName("avatar")
-    var avatar: Avatar? = null
+    val avatar: Avatar?,
 
     @SerializedName("bot")
-    var bot: Boolean = false
+    val bot: Boolean,
 
     @SerializedName("system")
-    var system: Boolean = false
+    val system: Boolean,
 
     @SerializedName("locale")
-    var locale: String = ""
+    val locale: String,
 
     @SerializedName("verified")
-    var verified: Boolean = false
+    val verified: Boolean,
 
     @SerializedName("email")
-    var email: String? = null
+    val email: String?,
 
     @SerializedName("flags")
-    var flags: Int = 0
+    val flags: Int,
 
     @SerializedName("premium_type")
-    var premiumType: PremiumType = PremiumType.NONE
+    val premiumType: PremiumType,
 
     @SerializedName("public_flags")
-    var publicFlags: Int = 0
-
+    val publicFlags: Int
+) : Entity(shard) {
     fun hasFlag(flag: UserFlag) = (publicFlags and flag.value) == flag.value
 }

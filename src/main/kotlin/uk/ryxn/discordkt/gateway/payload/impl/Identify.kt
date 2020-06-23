@@ -1,11 +1,15 @@
 package uk.ryxn.discordkt.gateway.payload.impl
 
 import com.google.gson.annotations.SerializedName
+import uk.ryxn.discordkt.gateway.Shard
 import uk.ryxn.discordkt.gateway.ShardData
 import uk.ryxn.discordkt.gateway.payload.PayloadData
 import uk.ryxn.discordkt.gateway.payload.Payload
 
-open class Identify : Payload() {
+open class Identify(
+    @Transient
+    override val shard: Shard
+) : Payload(shard) {
 
     @SerializedName("d")
     lateinit var data: Data
@@ -50,8 +54,8 @@ open class Identify : Payload() {
     companion object {
         val defaultProperties = Properties(os = "linux", browser = "discord.kt", device = "discord.kt")
 
-        fun create(data: Data): Identify {
-            val identify = Identify()
+        fun create(shard: Shard, data: Data): Identify {
+            val identify = Identify(shard)
 
             identify.setOpcode(PayloadData.IDENTIFY)
             identify.data = data

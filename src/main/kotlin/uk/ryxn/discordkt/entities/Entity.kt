@@ -4,5 +4,5 @@ import uk.ryxn.discordkt.gateway.Shard
 
 open class Entity(
     @Transient
-    open val shard: Shard
+    open var shard: Shard
 )

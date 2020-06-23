@@ -14,8 +14,13 @@ import kotlinx.coroutines.sync.withLock
 import uk.ryxn.discordkt.Constants
 import uk.ryxn.discordkt.core.gsonBuilder
 import uk.ryxn.discordkt.core.withEntityAdapters
+import uk.ryxn.discordkt.core.withPayloadAdapters
+import uk.ryxn.discordkt.entities.user.User
+import uk.ryxn.discordkt.gateway.event.Event
+import uk.ryxn.discordkt.gateway.event.impl.Ready
 import uk.ryxn.discordkt.gateway.payload.PayloadData
 import uk.ryxn.discordkt.gateway.payload.Payload
+import uk.ryxn.discordkt.gateway.payload.impl.Dispatch
 import uk.ryxn.discordkt.gateway.payload.impl.Heartbeat
 import uk.ryxn.discordkt.gateway.payload.impl.Hello
 import uk.ryxn.discordkt.gateway.payload.impl.Identify
@@ -28,6 +33,7 @@ class Shard(options: ShardOptions.() -> Unit) {
 
     val gson = gsonBuilder
         .withEntityAdapters(this)
+        .withPayloadAdapters(this)
         .create()
 
     private var state = State.DEAD
@@ -66,14 +72,14 @@ class Shard(options: ShardOptions.() -> Unit) {
         startHeartbeatLoop(hello.data.heartbeatInterval)
 
         // identify ourselves to discord
-        val identify = Identify.create(Identify.Data(
+        val identify = Identify.create(this, Identify.Data(
             token = options.token,
             shard = ShardData(0, 1)
         ))
         identify.write()
 
         while (true) {
-            println(readPayload())
+            val payload = readPayload()
         }
     }
 
@@ -90,7 +96,6 @@ class Shard(options: ShardOptions.() -> Unit) {
 
     private fun readPayload(): Payload {
         val json = gson.fromJson<JsonObject>(readSafe(), JsonObject::class.java)
-        println(json)
 
         // find opcode so we can get the payload's class
         val opcode = PayloadData.get(json.get("op").asInt)
@@ -138,7 +143,7 @@ class Shard(options: ShardOptions.() -> Unit) {
             s = seq
         }
 
-        Heartbeat.create(s).write()
+        Heartbeat.create(this, s).write()
     }
 
     fun kill() {

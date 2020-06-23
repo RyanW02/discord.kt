@@ -2,16 +2,27 @@ package uk.ryxn.discordkt.gateway.event.impl
 
 import com.google.gson.annotations.SerializedName
 import uk.ryxn.discordkt.entities.channel.Channel
+import uk.ryxn.discordkt.entities.guild.UnavailableGuild
 import uk.ryxn.discordkt.entities.user.User
+import uk.ryxn.discordkt.gateway.ShardData
 import uk.ryxn.discordkt.gateway.event.Event
 
-class Ready : Event {
+class Ready(
     @SerializedName("v")
-    var version: Int = 0
+    val version: Int,
 
     @SerializedName("user")
-    lateinit var user: User
+    val user: User,
 
     @SerializedName("private_channels")
-    var privateChannels: Array<Channel> = emptyArray() // always empty
-}
+    val privateChannels: Array<Channel>, // always empty
+
+    @SerializedName("guilds")
+    val guilds: Array<UnavailableGuild>,
+
+    @SerializedName("session_id")
+    val sessionId: String,
+
+    @SerializedName("shard")
+    val shard: ShardData
+) : Event

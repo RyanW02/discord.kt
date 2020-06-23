@@ -2,8 +2,9 @@ package uk.ryxn.discordkt.gateway.payload
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import uk.ryxn.discordkt.gateway.Shard
 
-abstract class Payload {
+abstract class Payload(@Transient open val shard: Shard) {
     @SerializedName("op")
     @Expose(serialize = true, deserialize = true)
     var opcode: Int? = null
