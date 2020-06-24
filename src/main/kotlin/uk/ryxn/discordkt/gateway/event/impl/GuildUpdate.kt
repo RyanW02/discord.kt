@@ -5,12 +5,12 @@ import uk.ryxn.discordkt.gateway.event.Event
 import uk.ryxn.discordkt.gateway.event.CustomDeserializer
 import uk.ryxn.discordkt.gateway.event.createDeserializer
 
-class GuildCreate(
+class GuildUpdate(
     val guild: Guild
 ) : Event {
-    companion object : CustomDeserializer<GuildCreate>() {
+    companion object : CustomDeserializer<GuildUpdate>() {
         override val deserializer = createDeserializer { json, type, ctx ->
-            GuildCreate(ctx.deserialize(json, type))
+            GuildUpdate(ctx.deserialize(json, type))
         }
     }
 }
