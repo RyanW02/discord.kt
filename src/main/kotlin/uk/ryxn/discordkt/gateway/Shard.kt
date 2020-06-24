@@ -18,6 +18,7 @@ import uk.ryxn.discordkt.core.withEventAdapters
 import uk.ryxn.discordkt.core.withPayloadAdapters
 import uk.ryxn.discordkt.entities.user.User
 import uk.ryxn.discordkt.gateway.event.Event
+import uk.ryxn.discordkt.gateway.event.impl.ChannelPinsUpdate
 import uk.ryxn.discordkt.gateway.event.impl.Ready
 import uk.ryxn.discordkt.gateway.payload.PayloadData
 import uk.ryxn.discordkt.gateway.payload.Payload
@@ -27,6 +28,7 @@ import uk.ryxn.discordkt.gateway.payload.impl.Hello
 import uk.ryxn.discordkt.gateway.payload.impl.Identify
 import uk.ryxn.discordkt.http.client
 import uk.ryxn.discordkt.utils.RWMutex
+import java.lang.Exception
 
 class Shard(options: ShardOptions.() -> Unit) {
 
@@ -81,7 +83,11 @@ class Shard(options: ShardOptions.() -> Unit) {
         identify.write()
 
         while (true) {
-            val payload = readPayload()
+            try {
+                val payload = readPayload()
+            } catch(ex: Exception) {
+                ex.printStackTrace()
+            }
         }
     }
 
@@ -117,7 +123,6 @@ class Shard(options: ShardOptions.() -> Unit) {
     private suspend fun ClientWebSocketSession.write(payload: Payload) {
         // encode
         val json = gson.toJson(payload)
-        println(json)
         send(Frame.Text(json))
     }
 

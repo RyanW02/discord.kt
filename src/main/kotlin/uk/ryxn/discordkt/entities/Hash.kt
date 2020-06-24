@@ -3,7 +3,7 @@ package uk.ryxn.discordkt.entities
 import com.google.gson.*
 import java.lang.reflect.Type
 
-class Avatar(val animated: Boolean, val data: ULongArray) {
+class Hash(val animated: Boolean, val data: ULongArray) {
     override fun toString(): String {
         if (data.size < 2) {
             return ""
@@ -24,15 +24,15 @@ class Avatar(val animated: Boolean, val data: ULongArray) {
     }
 }
 
-class AvatarAdapter : JsonSerializer<Avatar>, JsonDeserializer<Avatar> {
-    override fun serialize(src: Avatar, typeOfSrc: Type, context: JsonSerializationContext) =
+class HashAdapter : JsonSerializer<Hash>, JsonDeserializer<Hash> {
+    override fun serialize(src: Hash, typeOfSrc: Type, context: JsonSerializationContext) =
         JsonPrimitive(src.toString())
 
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Avatar {
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Hash {
         val s = json.asString
 
         if (s.length != 32 && s.length != 34) {
-            return Avatar(false, ULongArray(0))
+            return Hash(false, ULongArray(0))
         }
 
         val animated = s.length == 34
@@ -53,7 +53,7 @@ class AvatarAdapter : JsonSerializer<Avatar>, JsonDeserializer<Avatar> {
         data[0] = first.toULong()
         data[1] = second.toULong()
 
-        return Avatar(animated, data)
+        return Hash(animated, data)
     }
 
     private fun ByteArray.toULong(): ULong {

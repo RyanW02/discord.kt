@@ -9,20 +9,20 @@ data class StoreChannel(
     override var shard: Shard,
 
     @SerializedName("guild_id")
-    override var guildId: Snowflake,
+    override val guildId: Snowflake,
 
     @SerializedName("position")
-    override var position: Int,
+    override val position: Int,
 
     @SerializedName("permission_overwrites")
-    override var permissionOverwrites: List<PermissionOverwrite>,
+    override val permissionOverwrites: List<PermissionOverwrite>,
 
     @SerializedName("name")
-    override var name: String?,
+    override val name: String?,
 
     @SerializedName("nsfw")
-    override var nsfw: Boolean,
+    override val nsfw: Boolean,
 
     @SerializedName("parent_id")
-    override var parentId: Snowflake?
+    override val parentId: Snowflake?
 ) : Channel(shard), GuildChannel

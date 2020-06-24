@@ -5,13 +5,12 @@ import uk.ryxn.discordkt.entities.Entity
 import uk.ryxn.discordkt.entities.Snowflake
 import uk.ryxn.discordkt.gateway.Shard
 
-data class UnavailableGuild(
-    @Transient
-    override var shard: Shard,
-
+open class UnavailableGuild(shard: Shard) : Entity(shard) {
     @SerializedName("id")
-    val id: Snowflake,
+    var id: Snowflake = 0u
+        private set
 
     @SerializedName("unavailable")
-    val unavailable: Boolean?
-) : Entity(shard)
+    var unavailable: Boolean? = null
+        private set
+}

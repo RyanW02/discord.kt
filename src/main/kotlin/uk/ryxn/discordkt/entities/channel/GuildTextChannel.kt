@@ -11,5 +11,5 @@ data class GuildTextChannel(
     // seconds
     // 0-21600
     @SerializedName("rate_limit_per_user")
-    var rateLimitPerUser: Short = 0
+    val rateLimitPerUser: Short = 0
 ) : AbstractGuildTextChannel(shard)

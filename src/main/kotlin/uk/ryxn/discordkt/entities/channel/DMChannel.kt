@@ -7,5 +7,5 @@ import uk.ryxn.discordkt.gateway.Shard
 
 open class DMChannel(shard: Shard) : TextChannel(shard) {
     @SerializedName("recipients")
-    var recipients: Array<User> = emptyArray()
+    val recipients: Array<User> = emptyArray()
 }

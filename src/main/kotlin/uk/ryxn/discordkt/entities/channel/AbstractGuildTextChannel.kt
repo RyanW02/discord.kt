@@ -4,25 +4,25 @@ import com.google.gson.annotations.SerializedName
 import uk.ryxn.discordkt.entities.Snowflake
 import uk.ryxn.discordkt.gateway.Shard
 
-open class AbstractGuildTextChannel(shard: Shard) : TextChannel(shard), GuildChannel {
+abstract class AbstractGuildTextChannel(shard: Shard) : TextChannel(shard), GuildChannel {
     @SerializedName("guild_id")
-    override var guildId: Snowflake = 0u
+    override val guildId: Snowflake = 0u
 
     @SerializedName("position")
-    override var position: Int = 0
+    override val position: Int = 0
 
     @SerializedName("permission_overwrites")
-    override var permissionOverwrites: List<PermissionOverwrite> = emptyList()
+    override val permissionOverwrites: List<PermissionOverwrite> = emptyList()
 
     @SerializedName("name")
-    override var name: String? = null
+    override val name: String? = null
 
     @SerializedName("nsfw")
-    override var nsfw: Boolean = false
+    override val nsfw: Boolean = false
 
     @SerializedName("parent_id")
-    override var parentId: Snowflake? = null
+    override val parentId: Snowflake? = null
 
     @SerializedName("topic")
-    var topic: String? = null
+    val topic: String? = null
 }

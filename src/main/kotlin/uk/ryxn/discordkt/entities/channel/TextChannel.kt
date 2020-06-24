@@ -6,5 +6,5 @@ import uk.ryxn.discordkt.gateway.Shard
 
 open class TextChannel(shard: Shard) : Channel(shard) {
     @SerializedName("last_message_id")
-    var lastMessageId: Snowflake? = null
+    val lastMessageId: Snowflake? = null
 }
