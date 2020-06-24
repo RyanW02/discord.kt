@@ -1,8 +1,10 @@
 package uk.ryxn.discordkt.gateway
 
 import com.google.gson.*
+import com.google.gson.annotations.JsonAdapter
 import java.lang.reflect.Type
 
+@JsonAdapter(ShardDataAdapter::class)
 data class ShardData(val shardId: Int, val totalShards: Int)
 
 class ShardDataAdapter : JsonSerializer<ShardData>, JsonDeserializer<ShardData> {

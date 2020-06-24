@@ -1,6 +1,7 @@
 package uk.ryxn.discordkt.entities.user
 
 import com.google.gson.*
+import com.google.gson.annotations.JsonAdapter
 import java.lang.reflect.Type
 
 typealias Discriminator = Short

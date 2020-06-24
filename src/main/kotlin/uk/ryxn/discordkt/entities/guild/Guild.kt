@@ -7,11 +7,11 @@ import uk.ryxn.discordkt.entities.channel.Channel
 import uk.ryxn.discordkt.entities.guild.emoji.Emoji
 import uk.ryxn.discordkt.entities.guild.member.Member
 import uk.ryxn.discordkt.entities.guild.role.Role
-import uk.ryxn.discordkt.entities.user.UserFlag
+import uk.ryxn.discordkt.entities.user.PremiumType
+import uk.ryxn.discordkt.entities.user.presence.Presence
 import uk.ryxn.discordkt.entities.voice.VoiceState
 import uk.ryxn.discordkt.gateway.Shard
 import java.time.OffsetDateTime
-import kotlin.reflect.jvm.internal.impl.util.MemberKindCheck
 
 open class Guild(
     shard: Shard,
@@ -118,6 +118,43 @@ open class Guild(
     val channels: List<Channel>?, // Only sent on GUILD_CREATE
 
     @SerializedName("presences")
+    val presences: List<Presence>?, // Only sent on GUILD_CREATE
+
+    @SerializedName("max_presences")
+    val maxPresences: Int?, // if null, value is 25000
+
+    @SerializedName("max_members")
+    val maxMembers: Int?,
+
+    @SerializedName("vanity_url_code")
+    val vanityUrlCode: String?,
+
+    @SerializedName("description")
+    val description: String?,
+
+    @SerializedName("banner")
+    val banner: String?,
+
+    @SerializedName("premium_tier")
+    val boostLevel: PremiumTier,
+
+    @SerializedName("premium_subscription_count")
+    val boosts: Int?,
+
+    @SerializedName("preferred_locale")
+    val preferredLocal: String,
+
+    @SerializedName("public_updates_channel_id")
+    val publicUpdatesChannelId: Snowflake?,
+
+    @SerializedName("max_video_channel_users")
+    val maxVideoChannelUsers: Int?,
+
+    @SerializedName("approximate_member_count")
+    val approximateMemberCount: Int?,
+
+    @SerializedName("approximate_presence_count")
+    val approximatePresenceCount: Int?
 ) : UnavailableGuild(shard) {
     fun hasSystemChannelFlag(flag: SystemChannelFlag) = (systemChannelFlags and flag.value) == flag.value
 }

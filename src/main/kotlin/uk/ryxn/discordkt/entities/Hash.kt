@@ -1,8 +1,10 @@
 package uk.ryxn.discordkt.entities
 
 import com.google.gson.*
+import com.google.gson.annotations.JsonAdapter
 import java.lang.reflect.Type
 
+@JsonAdapter(HashAdapter::class)
 class Hash(val animated: Boolean, val data: ULongArray) {
     override fun toString(): String {
         if (data.size < 2) {
