@@ -8,27 +8,34 @@ import uk.ryxn.discordkt.gateway.Shard
 import java.time.OffsetDateTime
 
 // TODO: Role IDs
-class Member (
-    shard: Shard,
-
+open class Member (
+    shard: Shard
+) : Entity(shard) {
     @SerializedName("user")
-    val user: User?, // not included in MESSAGE_CREATE or MESSAGE_UPDATE events
+    var user: User? = null // not included in MESSAGE_CREATE or MESSAGE_UPDATE events
+        private set
 
     @SerializedName("nick")
-    val nick: String?,
+    var nick: String? = null
+        private set
 
     @SerializedName("roles")
-    val roleIds: List<Snowflake>,
+    lateinit var roleIds: List<Snowflake>
+        private set
 
     @SerializedName("joined_at")
-    val joinedAt: OffsetDateTime,
+    lateinit var joinedAt: OffsetDateTime
+        private set
 
     @SerializedName("premium_since")
-    val premiumSince: OffsetDateTime?,
+    var premiumSince: OffsetDateTime? = null
+        private set
 
     @SerializedName("deaf")
-    val deaf: Boolean,
+    var deaf: Boolean = false
+        private set
 
     @SerializedName("mute")
-    val mute: Boolean
-) : Entity(shard)
+    var mute: Boolean = false
+        private set
+}
