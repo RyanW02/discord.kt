@@ -1,23 +1,21 @@
 package uk.ryxn.discordkt.core
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.TypeAdapter
-import com.google.gson.TypeAdapterFactory
-import com.google.gson.reflect.TypeToken
-import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonWriter
 import uk.ryxn.discordkt.entities.*
 import uk.ryxn.discordkt.entities.user.*
 import uk.ryxn.discordkt.gateway.Shard
 import uk.ryxn.discordkt.gateway.ShardData
 import uk.ryxn.discordkt.gateway.ShardDataAdapter
+import uk.ryxn.discordkt.gateway.event.Event
+import uk.ryxn.discordkt.gateway.event.CustomDeserializer
+import uk.ryxn.discordkt.gateway.event.impl.Reconnect
 import uk.ryxn.discordkt.gateway.payload.Payload
 import uk.ryxn.discordkt.gateway.payload.PayloadInstanceCreator
 import uk.ryxn.discordkt.gateway.payload.impl.Dispatch
 import uk.ryxn.discordkt.gateway.payload.impl.Heartbeat
 import uk.ryxn.discordkt.gateway.payload.impl.Hello
 import uk.ryxn.discordkt.gateway.payload.impl.Identify
+import kotlin.reflect.full.companionObjectInstance
 
 // contains the gson instance with all type adapters registered, etc.
 val gsonBuilder = GsonBuilder()
@@ -38,5 +36,14 @@ fun GsonBuilder.withPayloadAdapters(shard: Shard): GsonBuilder {
     registerPayloadAdapter<Hello>(shard)
     registerPayloadAdapter<Identify>(shard)
 
+    return this
+}
+
+inline fun<reified T: Event> GsonBuilder.registerEventAdapter() {
+    registerTypeAdapter(T::class.java, (T::class.companionObjectInstance as CustomDeserializer<*>).deserializer)
+}
+
+fun GsonBuilder.withEventAdapters(): GsonBuilder {
+    registerEventAdapter<Reconnect>()
     return this
 }

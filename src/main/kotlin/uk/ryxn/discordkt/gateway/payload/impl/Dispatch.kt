@@ -1,5 +1,6 @@
 package uk.ryxn.discordkt.gateway.payload.impl
 
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import uk.ryxn.discordkt.gateway.Shard
@@ -12,7 +13,7 @@ class Dispatch(
     override val shard: Shard
 ) : Payload(shard) {
     @SerializedName("d")
-    lateinit var raw: JsonObject
+    lateinit var raw: JsonElement
 
     @SerializedName("t")
     lateinit var eventType: EventType

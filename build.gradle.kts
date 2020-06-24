@@ -14,6 +14,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation(kotlin("reflect"))
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("com.google.code.gson:gson:2.8.6")
 }

@@ -14,6 +14,7 @@ import kotlinx.coroutines.sync.withLock
 import uk.ryxn.discordkt.Constants
 import uk.ryxn.discordkt.core.gsonBuilder
 import uk.ryxn.discordkt.core.withEntityAdapters
+import uk.ryxn.discordkt.core.withEventAdapters
 import uk.ryxn.discordkt.core.withPayloadAdapters
 import uk.ryxn.discordkt.entities.user.User
 import uk.ryxn.discordkt.gateway.event.Event
@@ -34,6 +35,7 @@ class Shard(options: ShardOptions.() -> Unit) {
     val gson = gsonBuilder
         .withEntityAdapters(this)
         .withPayloadAdapters(this)
+        .withEventAdapters()
         .create()
 
     private var state = State.DEAD
