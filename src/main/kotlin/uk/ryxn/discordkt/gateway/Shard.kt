@@ -104,6 +104,7 @@ class Shard(options: ShardOptions.() -> Unit) {
 
     private fun readPayload(): Payload {
         val json = gson.fromJson<JsonObject>(readSafe(), JsonObject::class.java)
+        println(json)
 
         // find opcode so we can get the payload's class
         val opcode = PayloadData.get(json.get("op").asInt)
