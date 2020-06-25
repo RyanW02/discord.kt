@@ -72,19 +72,17 @@ class Shard(val shardManager: ShardManager, options: ShardOptions.() -> Unit) {
         startHeartbeatLoop(hello.data.heartbeatInterval)
 
         // identify ourselves to discord
-        val identify = Identify.create(this, Identify.Data(
-            token = options.token,
-            shard = ShardData(0, 1)
-        ))
+        val identify = Identify.create(
+            this, Identify.Data(
+                token = options.token,
+                shard = ShardData(options.shardId, options.totalShards)
+            )
+        )
         identify.write()
 
         while (true) {
-            try {
-                val payload = readPayload()
-                payload.handle(this)
-            } catch(ex: Exception) {
-                ex.printStackTrace()
-            }
+            val payload = readPayload()
+            payload.handle(this)
         }
     }
 
@@ -136,8 +134,10 @@ class Shard(val shardManager: ShardManager, options: ShardOptions.() -> Unit) {
     private suspend fun startHeartbeatLoop(interval: Long) {
         heartbeatMutex.withLock {
             heartbeatLoop = GlobalScope.launch {
-                delay(interval)
-                doHeartbeat()
+                while (true) {
+                    delay(interval)
+                    doHeartbeat()
+                }
             }
         }
     }
@@ -151,7 +151,10 @@ class Shard(val shardManager: ShardManager, options: ShardOptions.() -> Unit) {
         Heartbeat.create(this, s).write()
     }
 
-    fun kill() {
-
+    suspend fun kill() {
+        heartbeatMutex.withLock {
+            heartbeatLoop?.cancel()
+            heartbeatLoop = null
+        }
     }
 }

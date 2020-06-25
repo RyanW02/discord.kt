@@ -22,6 +22,7 @@ class ShardManager(options: BotOptions.() -> Unit) {
         Shard(this) {
             token = botOptions.token
             shardId = botOptions.lowestShard + i
+            totalShards = botOptions.totalShards
         }
     }
 

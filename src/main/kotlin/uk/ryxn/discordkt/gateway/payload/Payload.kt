@@ -18,5 +18,5 @@ abstract class Payload(@Transient open val shard: Shard) {
         this.opcode = data.code
     }
 
-    abstract fun handle(shard: Shard)
+    open fun handle(shard: Shard) {}
 }
