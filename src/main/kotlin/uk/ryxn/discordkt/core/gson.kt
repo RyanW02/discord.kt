@@ -2,17 +2,21 @@ package uk.ryxn.discordkt.core
 
 import com.google.gson.GsonBuilder
 import uk.ryxn.discordkt.entities.*
-import uk.ryxn.discordkt.entities.channel.Channel
-import uk.ryxn.discordkt.entities.channel.ChannelAdapter
 import uk.ryxn.discordkt.entities.user.*
+import uk.ryxn.discordkt.entities.voice.VoiceState
 import uk.ryxn.discordkt.gateway.Shard
-import uk.ryxn.discordkt.gateway.ShardData
-import uk.ryxn.discordkt.gateway.ShardDataAdapter
 import uk.ryxn.discordkt.gateway.event.Event
 import uk.ryxn.discordkt.gateway.event.CustomDeserializer
-import uk.ryxn.discordkt.gateway.event.impl.ChannelCreate
-import uk.ryxn.discordkt.gateway.event.impl.ChannelDelete
-import uk.ryxn.discordkt.gateway.event.impl.ChannelUpdate
+import uk.ryxn.discordkt.gateway.event.impl.channel.ChannelCreate
+import uk.ryxn.discordkt.gateway.event.impl.channel.ChannelDelete
+import uk.ryxn.discordkt.gateway.event.impl.channel.ChannelUpdate
+import uk.ryxn.discordkt.gateway.event.impl.guild.GuildCreate
+import uk.ryxn.discordkt.gateway.event.impl.guild.GuildMemberAdd
+import uk.ryxn.discordkt.gateway.event.impl.guild.GuildUpdate
+import uk.ryxn.discordkt.gateway.event.impl.message.MessageCreate
+import uk.ryxn.discordkt.gateway.event.impl.message.MessageUpdate
+import uk.ryxn.discordkt.gateway.event.impl.user.UserUpdate
+import uk.ryxn.discordkt.gateway.event.impl.voice.VoiceStateUpdate
 import uk.ryxn.discordkt.gateway.payload.Payload
 import uk.ryxn.discordkt.gateway.payload.PayloadInstanceCreator
 import uk.ryxn.discordkt.gateway.payload.impl.Dispatch
@@ -51,6 +55,13 @@ fun GsonBuilder.withEventAdapters(): GsonBuilder {
     registerEventAdapter<ChannelCreate>()
     registerEventAdapter<ChannelUpdate>()
     registerEventAdapter<ChannelDelete>()
+    registerEventAdapter<GuildCreate>()
+    registerEventAdapter<GuildUpdate>()
+    registerEventAdapter<GuildMemberAdd>()
+    registerEventAdapter<MessageCreate>()
+    registerEventAdapter<MessageUpdate>()
+    registerEventAdapter<UserUpdate>()
+    registerEventAdapter<VoiceStateUpdate>()
 
     return this
 }

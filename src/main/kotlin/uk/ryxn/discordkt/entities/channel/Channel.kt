@@ -6,7 +6,7 @@ import uk.ryxn.discordkt.entities.Entity
 import uk.ryxn.discordkt.entities.Snowflake
 import uk.ryxn.discordkt.gateway.Shard
 
-@JsonAdapter(Channel::class)
+@JsonAdapter(ChannelAdapter::class)
 open class Channel(shard: Shard) : Entity(shard) {
     @SerializedName("id")
     var id: Snowflake = 0u

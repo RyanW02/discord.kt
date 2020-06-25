@@ -12,8 +12,11 @@ abstract class Payload(@Transient open val shard: Shard) {
     @SerializedName("s")
     @Expose(serialize = false, deserialize = true)
     var sequenceNumber: Int? = null
+        private set
 
     fun setOpcode(data: PayloadData) {
         this.opcode = data.code
     }
+
+    abstract fun handle(shard: Shard)
 }

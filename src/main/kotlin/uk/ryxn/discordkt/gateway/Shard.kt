@@ -16,10 +16,6 @@ import uk.ryxn.discordkt.core.gsonBuilder
 import uk.ryxn.discordkt.core.withEntityAdapters
 import uk.ryxn.discordkt.core.withEventAdapters
 import uk.ryxn.discordkt.core.withPayloadAdapters
-import uk.ryxn.discordkt.entities.user.User
-import uk.ryxn.discordkt.gateway.event.Event
-import uk.ryxn.discordkt.gateway.event.impl.ChannelPinsUpdate
-import uk.ryxn.discordkt.gateway.event.impl.Ready
 import uk.ryxn.discordkt.gateway.payload.PayloadData
 import uk.ryxn.discordkt.gateway.payload.Payload
 import uk.ryxn.discordkt.gateway.payload.impl.Dispatch
@@ -30,7 +26,7 @@ import uk.ryxn.discordkt.http.client
 import uk.ryxn.discordkt.utils.RWMutex
 import java.lang.Exception
 
-class Shard(options: ShardOptions.() -> Unit) {
+class Shard(val shardManager: ShardManager, options: ShardOptions.() -> Unit) {
 
     private val options = ShardOptions().also(options)
 
@@ -85,6 +81,7 @@ class Shard(options: ShardOptions.() -> Unit) {
         while (true) {
             try {
                 val payload = readPayload()
+                payload.handle(this)
             } catch(ex: Exception) {
                 ex.printStackTrace()
             }

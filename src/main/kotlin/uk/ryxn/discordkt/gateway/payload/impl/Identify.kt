@@ -63,4 +63,8 @@ open class Identify(
             return identify
         }
     }
+
+    override fun handle(shard: Shard) {
+        TODO("Not yet implemented")
+    }
 }

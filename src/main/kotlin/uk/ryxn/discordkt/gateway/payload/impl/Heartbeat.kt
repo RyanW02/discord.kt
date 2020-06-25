@@ -23,4 +23,8 @@ open class Heartbeat(
             return heartbeat
         }
     }
+
+    override fun handle(shard: Shard) {
+        TODO("Not yet implemented")
+    }
 }

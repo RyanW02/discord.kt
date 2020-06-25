@@ -16,4 +16,8 @@ class Hello(
         @SerializedName("heartbeat_interval")
         val heartbeatInterval: Long
     )
+
+    override fun handle(shard: Shard) {
+        TODO("Not yet implemented")
+    }
 }

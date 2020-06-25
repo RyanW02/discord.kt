@@ -21,4 +21,8 @@ class Dispatch(
     val event: Event by lazy {
         shard.gson.fromJson(raw, eventType.clazz)
     }
+
+    override fun handle(shard: Shard) {
+        shard.shardManager.executeEvent(event)
+    }
 }
