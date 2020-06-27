@@ -1,6 +1,8 @@
 package uk.ryxn.discordkt.gateway.payload.impl
 
 import com.google.gson.annotations.SerializedName
+import uk.ryxn.discordkt.entities.OmitNull
+import uk.ryxn.discordkt.entities.user.presence.UpdateStatus
 import uk.ryxn.discordkt.gateway.Shard
 import uk.ryxn.discordkt.gateway.ShardData
 import uk.ryxn.discordkt.gateway.payload.PayloadData
@@ -11,8 +13,24 @@ open class Identify(
     override val shard: Shard
 ) : Payload(shard) {
 
+    init {
+        setOpcode(PayloadData.IDENTIFY)
+    }
+
     @SerializedName("d")
     lateinit var data: Data
+
+    companion object {
+        val defaultProperties = Properties(os = "linux", browser = "discord.kt", device = "discord.kt")
+
+        fun create(shard: Shard, data: Data): Identify {
+            val identify = Identify(shard)
+
+            identify.data = data
+
+            return identify
+        }
+    }
 
     data class Data(
         @SerializedName("token")
@@ -31,12 +49,14 @@ open class Identify(
         val shard: ShardData,
 
         @SerializedName("presence")
-        val presence: Any? = null, // TODO
+        @OmitNull
+        val presence: UpdateStatus? = null,
 
         @SerializedName("guild_subscriptions")
         val guildSubscriptions: Boolean = true,
 
         @SerializedName("intents")
+        @OmitNull
         val intents: Int? = null
     )
 
@@ -50,21 +70,4 @@ open class Identify(
         @SerializedName("\$device")
         val device: String
     )
-
-    companion object {
-        val defaultProperties = Properties(os = "linux", browser = "discord.kt", device = "discord.kt")
-
-        fun create(shard: Shard, data: Data): Identify {
-            val identify = Identify(shard)
-
-            identify.setOpcode(PayloadData.IDENTIFY)
-            identify.data = data
-
-            return identify
-        }
-    }
-
-    override fun handle(shard: Shard) {
-        TODO("Not yet implemented")
-    }
 }

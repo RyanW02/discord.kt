@@ -28,9 +28,12 @@ import kotlin.reflect.full.companionObjectInstance
 
 // contains the gson instance with all type adapters registered, etc.
 val gsonBuilder = GsonBuilder()
+    .serializeNulls()
+    .addSerializationExclusionStrategy(SkipSerialisationExclusionStrategy())
     .registerTypeAdapter(Snowflake::class.java, SnowflakeAdapter())
     .registerTypeAdapter(Discriminator::class.java, DiscriminatorAdapter())
     .registerTypeAdapter(OffsetDateTime::class.java, ISO8601Adapter())
+    .registerTypeAdapterFactory(OmitNullAdapter())
 
 fun GsonBuilder.withEntityAdapters(shard: Shard) = registerTypeAdapterFactory(EntityAdapterFactory(shard))
 

@@ -1,6 +1,7 @@
 package uk.ryxn.discordkt.entities.user.presence
 
 import com.google.gson.annotations.SerializedName
+import uk.ryxn.discordkt.entities.OmitNull
 import uk.ryxn.discordkt.entities.Snowflake
 import uk.ryxn.discordkt.entities.guild.emoji.Emoji
 
@@ -12,40 +13,52 @@ data class Activity (
     val type: ActivityType,
 
     @SerializedName("url")
-    val url: String?,
+    @OmitNull
+    val url: String? = null,
 
     @SerializedName("created_at")
-    val createdAt: Long, // millis since unix epoch
+    @OmitNull
+    val createdAt: Long? = null, // millis since unix epoch
 
     @SerializedName("timestamps")
-    val timestamps: Timestamps?,
+    @OmitNull
+    val timestamps: Timestamps? = null,
 
     @SerializedName("application_id")
-    val snowflake: Snowflake?,
+    @OmitNull
+    val applicationId: Snowflake? = null,
 
     @SerializedName("details")
-    val details: String?,
+    @OmitNull
+    val details: String? = null,
 
     @SerializedName("state")
-    val state: String?,
+    @OmitNull
+    val state: String? = null,
 
     @SerializedName("emoji")
-    val emoji: Emoji?,
+    @OmitNull
+    val emoji: Emoji? = null,
 
     @SerializedName("party")
-    val party: Party?,
+    @OmitNull
+    val party: Party? = null,
 
     @SerializedName("assets")
-    val assets: Assets?,
+    @OmitNull
+    val assets: Assets? = null,
 
     @SerializedName("secrets")
-    val secrets: Secrets?,
+    @OmitNull
+    val secrets: Secrets? = null,
 
     @SerializedName("instance")
-    val instance: Boolean?,
+    @OmitNull
+    val instance: Boolean? = null,
 
     @SerializedName("flags")
-    val flags: Int
+    @OmitNull
+    val flags: Int? = null
 ) {
-    fun hasFlag(flag: ActivityFlag) = (flags and flag.value) == flag.value
+    fun hasFlag(flag: ActivityFlag) = ((flags ?: 0) and flag.value) == flag.value
 }

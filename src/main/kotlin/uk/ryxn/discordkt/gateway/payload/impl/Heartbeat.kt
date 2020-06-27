@@ -10,6 +10,10 @@ open class Heartbeat(
     override val shard: Shard
 ) : Payload(shard) {
 
+    init {
+        setOpcode(PayloadData.HEARTBEAT)
+    }
+
     @SerializedName("d")
     var lastSequenceNumber: Int? = null
 
@@ -17,7 +21,6 @@ open class Heartbeat(
         fun create(shard: Shard, lastSequenceNumber: Int?): Heartbeat {
             val heartbeat = Heartbeat(shard)
 
-            heartbeat.setOpcode(PayloadData.HEARTBEAT)
             heartbeat.lastSequenceNumber = lastSequenceNumber
 
             return heartbeat

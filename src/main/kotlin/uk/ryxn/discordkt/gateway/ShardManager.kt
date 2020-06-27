@@ -1,5 +1,8 @@
 package uk.ryxn.discordkt.gateway
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import uk.ryxn.discordkt.entities.user.presence.UpdateStatus
 import uk.ryxn.discordkt.gateway.event.Event
 import uk.ryxn.discordkt.gateway.event.eventbus.EventHandler
 import uk.ryxn.discordkt.gateway.event.eventbus.EventListener
@@ -14,7 +17,7 @@ import kotlin.reflect.full.isSubtypeOf
 
 class ShardManager(options: BotOptions.() -> Unit) {
 
-    private val botOptions = BotOptions().also(options)
+    val botOptions = BotOptions().also(options)
 
     private val listeners = mutableMapOf<KFunction<Event>, KClassifier>()
 
@@ -23,6 +26,7 @@ class ShardManager(options: BotOptions.() -> Unit) {
             token = botOptions.token
             shardId = botOptions.lowestShard + i
             totalShards = botOptions.totalShards
+            status = botOptions.status
         }
     }
 
@@ -48,5 +52,19 @@ class ShardManager(options: BotOptions.() -> Unit) {
         listeners.filterValues { it == event::class }.forEach { (listener, _) ->
             listener.call(event)
         }
+    }
+
+    fun getShard(shardId: Int) = shards[shardId - botOptions.lowestShard]
+
+    fun updateStatus(data: UpdateStatus) {
+        shards.forEach { shard ->
+            GlobalScope.launch {
+                shard.updateStatus(data)
+            }
+        }
+    }
+
+    suspend fun updateStatus(shardId: Int, data: UpdateStatus) {
+        getShard(shardId).updateStatus(data)
     }
 }
