@@ -1,18 +1,24 @@
 package uk.ryxn.discordkt.gateway
 
 import com.google.gson.JsonObject
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.features.json.GsonSerializer
+import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.websocket.ClientWebSocketSession
 import io.ktor.client.features.websocket.DefaultClientWebSocketSession
+import io.ktor.client.features.websocket.WebSockets
 import io.ktor.client.features.websocket.webSocketSession
 import io.ktor.client.request.url
 import io.ktor.http.HttpMethod
 import io.ktor.http.cio.websocket.Frame
 import io.ktor.http.cio.websocket.close
 import io.ktor.http.cio.websocket.readText
+import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.Mutex
 import uk.ryxn.discordkt.Constants
 import uk.ryxn.discordkt.core.gsonBuilder
+import uk.ryxn.discordkt.core.http.KtorGsonClient
 import uk.ryxn.discordkt.core.withEntityAdapters
 import uk.ryxn.discordkt.core.withEventAdapters
 import uk.ryxn.discordkt.core.withPayloadAdapters
@@ -20,7 +26,6 @@ import uk.ryxn.discordkt.entities.user.presence.UpdateStatus
 import uk.ryxn.discordkt.gateway.payload.PayloadData
 import uk.ryxn.discordkt.gateway.payload.Payload
 import uk.ryxn.discordkt.gateway.payload.impl.*
-import uk.ryxn.discordkt.http.client
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
@@ -28,13 +33,20 @@ import java.util.concurrent.atomic.AtomicReference
 
 class Shard(val shardManager: ShardManager, options: ShardOptions.() -> Unit) {
 
-    private val options = ShardOptions().also(options)
+    val options = ShardOptions().also(options)
 
-    val gson = gsonBuilder
+    internal val gson = gsonBuilder
         .withEntityAdapters(this)
         .withPayloadAdapters(this)
         .withEventAdapters()
         .create()
+
+    val httpClient = HttpClient(CIO) {
+        install(WebSockets)
+        install(JsonFeature) {
+            serializer = KtorGsonClient(gson)
+        }
+    }
 
     private var state = AtomicReference<State>(State.DEAD)
 
@@ -59,7 +71,7 @@ class Shard(val shardManager: ShardManager, options: ShardOptions.() -> Unit) {
 
         // connect websocket
         withContext(wsContext) {
-            _ws = client.webSocketSession {
+            _ws = httpClient.webSocketSession {
                 url(Constants.GATEWAY)
                 method = HttpMethod.Get
             }
@@ -87,7 +99,6 @@ class Shard(val shardManager: ShardManager, options: ShardOptions.() -> Unit) {
         }
 
         while (true) {
-            println("bruh")
             val payload = readPayload()
             payload.handle(this)
         }
@@ -200,4 +211,6 @@ class Shard(val shardManager: ShardManager, options: ShardOptions.() -> Unit) {
         val payload = UpdateVoiceState.create(this, data)
         payload.write()
     }
+
+    fun rateLimiter() = shardManager.botOptions.rateLimiter
 }

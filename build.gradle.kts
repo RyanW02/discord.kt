@@ -16,5 +16,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-json-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-client-gson:$ktorVersion")
     implementation("com.google.code.gson:gson:2.8.6")
 }
